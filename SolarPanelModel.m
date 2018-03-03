@@ -17,7 +17,7 @@ miu_Voc = -0.1184;
 miu_Isc = 0.0049;
 Vocr = 38.2;
 Iscr = 9.19;
-
+%%%%%
 
 %-------------------Environment variables-------------------------------%
 %ta = 20;                        %atmospheric temperature (20 for NOCT)
