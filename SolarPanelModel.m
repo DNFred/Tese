@@ -56,7 +56,7 @@ Voc = Vocr + miu_Voc*(Tc - Tr) + m*Vt*log(G/Gr);
 Io = (Isc - (Voc - Rs*Isc)/ Rsh) * exp(-Voc/ (m*Vt));
 Is = Io * exp(Voc/ (m*Vt)) + Voc/ Rsh;
 
-Vd = linspace(0,35);
+Vd = linspace(0,50);            %Adjust max value for better plots
 I = Is - Io * (exp(Vd/ (m*Vt)) - 1) - Vd/ Rsh;
 V = Vd - Rs*I;
 
