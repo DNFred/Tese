@@ -17,7 +17,6 @@ miu_Voc = -0.1184;
 miu_Isc = 0.0049;
 Vocr = 38.2;
 Iscr = 9.19;
-%%%%%
 
 %-------------------Environment variables-------------------------------%
 %ta = 20;                        %atmospheric temperature (20 for NOCT)
@@ -57,13 +56,23 @@ Voc = Vocr + miu_Voc*(Tc - Tr) + m*Vt*log(G/Gr);
 Io = (Isc - (Voc - Rs*Isc)/ Rsh) * exp(-Voc/ (m*Vt));
 Is = Io * exp(Voc/ (m*Vt)) + Voc/ Rsh;
 
-I = linspace(0,Isc);
-V = m*Vt * log((Is - I)/Io + 1) - Rs*I;
+Vd = linspace(0,35);
+I = Is - Io * (exp(Vd/ (m*Vt)) - 1) - Vd/ Rsh;
+V = Vd - Rs*I;
+
 figure
 plot(V,I)
-axis([0 inf 0 10])
+axis([0 Voc*1.1 0 Isc*1.1])
+xlabel('Voltage [V]')
+ylabel('Current [I]')
 
 P = V .* I;
+Pmax = max(P);
 figure
 plot(V,P)
-axis([0 inf 0 300])
+axis([0 Voc*1.1 0 Pmax*1.1])
+xlabel('Voltage [V]')
+ylabel('Power [W]')
+
+
+
