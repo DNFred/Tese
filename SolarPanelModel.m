@@ -37,7 +37,8 @@ F = @(V) [Impr - Iscr + (Vmpr + V(3)*Impr + V(3)*Iscr)/ V(2) + (Iscr - (Vocr - V
             1/V(2) + (-(V(2)*Iscr - Vocr + V(3)*Iscr) * exp((V(3)*Iscr - Vocr)/ (V(1)*Vtr))/ (V(2) * V(1)*Vtr) - 1/V(2))/ (1 + V(3) * (V(2)*Iscr - Vocr + V(3)*Iscr) * exp((V(3)*Iscr - Vocr)/ (V(1)*Vtr))/ (V(2) * V(1)*Vtr) + V(3)/V(2))];
 
 InitialGuess = [60; 700; 0.2];
-options = optimoptions('fsolve','Display','none','PlotFcn',@optimplotfirstorderopt,'MaxFunctionEvaluations',2000);
+% options = optimoptions('fsolve','Display','none','PlotFcn',@optimplotfirstorderopt,'MaxFunctionEvaluations',2000);
+options = optimoptions('fsolve','MaxFunctionEvaluations',2000);
 sol = fsolve(F, InitialGuess,options);
 % ShouldBeZero = F(sol)
 m = sol(1);
@@ -47,32 +48,34 @@ Ior = (Iscr - (Vocr - Rs*Iscr)/ Rsh) * exp(-Vocr/ (m*Vtr));
 Isr = Ior * exp(Vocr/ (m*Vtr)) + Vocr/Rsh;
 
 
-
 %Simulation of the model
 %Tc = Tc;ta + G*(NOCT-20)/ 800 + 273.15;
 Vt = K*Tc/ q;
 Isc = G/ Gr * (Iscr + miu_Isc*(Tc - Tr));
-Voc = Vocr + miu_Voc*(Tc - Tr) + m*Vt*log(G/Gr);
+Voc = Vocr + miu_Voc*(Tc - Tr) + m*Vt*log(G/Gr)
 Io = (Isc - (Voc - Rs*Isc)/ Rsh) * exp(-Voc/ (m*Vt));
 Is = Io * exp(Voc/ (m*Vt)) + Voc/ Rsh;
-
 Vd = linspace(0,50);            %Adjust max value for better plots
 I = Is - Io * (exp(Vd/ (m*Vt)) - 1) - Vd/ Rsh;
 V = Vd - Rs*I;
 
+%MATLAB results of the simulation
 figure
 plot(V,I)
 axis([0 Voc*1.1 0 Isc*1.1])
 xlabel('Voltage [V]')
 ylabel('Current [I]')
 
-P = V .* I;
-Pmax = max(P);
-figure
-plot(V,P)
-axis([0 Voc*1.1 0 Pmax*1.1])
-xlabel('Voltage [V]')
-ylabel('Power [W]')
+% P = V .* I;
+% Pmax = max(P);
+% figure
+% plot(V,P)
+% axis([0 Voc*1.1 0 Pmax*1.1])
+% xlabel('Voltage [V]')
+% ylabel('Power [W]')
 
 
-
+%Simulink results of the simulation
+sim('PVArray.slx')
+Vout
+Iout
