@@ -58,29 +58,33 @@ Is = Io * exp(Voc/ (m*Vt)) + Voc/ Rsh;
 Vd_vetor = linspace(0,50);      %Adjust max value for better plots
 I = Is - Io * (exp(Vd_vetor/ (m*Vt)) - 1) - Vd_vetor/ Rsh;
 V = Vd_vetor - Rs*I;
-
+Vd = V(58) + Rs*I(58);
 %MATLAB results of the simulation
-% figure
-% plot(V,I)
-% axis([0 Voc*1.1 0 Isc*1.1])
-% xlabel('Voltage [V]')
-% ylabel('Current [I]')
-% 
-% P = V .* I;
-% Pmax = max(P);
-% figure
-% plot(V,P)
-% axis([0 Voc*1.1 0 Pmax*1.1])
-% xlabel('Voltage [V]')
-% ylabel('Power [W]')
+figure
+plot(V,I)
+axis([0 Voc*1.1 0 Isc*1.1])
+xlabel('Voltage [V]')
+ylabel('Current [I]')
+
+P = V .* I;
+[Pmpp, ind] = max(P);           %Returns the maximum power and where it occurs
+figure
+plot(V,P)
+axis([0 Voc*1.1 0 Pmpp*1.1])
+xlabel('Voltage [V]')
+ylabel('Power [W]')
 
 
 %Simulink results of the simulation
-Load = 3.0386;                  %Pmax/I(Pmax)^2
+Load = Pmpp/I(ind)^2;
 sim('PVArray.slx')
+
 figure
-plot(tout,Vout)
+plot(tout,Vout*10)
 hold on
-plot(tout,Iout)
-legend('Vout','Iout')
-xlabel('Time')
+plot(tout,Iout*10)
+plot(tout,Pout)
+legend('Vout','Iout','Pout')
+axis([0 Voc*1.1 0 Voc*11])
+
+
