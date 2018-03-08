@@ -55,9 +55,9 @@ Isc = G/ Gr * (Iscr + miu_Isc*(Tc - Tr));
 Voc = Vocr + miu_Voc*(Tc - Tr) + m*Vt*log(G/Gr);
 Io = (Isc - (Voc - Rs*Isc)/ Rsh) * exp(-Voc/ (m*Vt));
 Is = Io * exp(Voc/ (m*Vt)) + Voc/ Rsh;
-Vd = linspace(0,50);            %Adjust max value for better plots
-I = Is - Io * (exp(Vd/ (m*Vt)) - 1) - Vd/ Rsh;
-V = Vd - Rs*I;
+Vd_vetor = linspace(0,50);      %Adjust max value for better plots
+I = Is - Io * (exp(Vd_vetor/ (m*Vt)) - 1) - Vd_vetor/ Rsh;
+V = Vd_vetor - Rs*I;
 
 %MATLAB results of the simulation
 % figure
@@ -76,6 +76,11 @@ V = Vd - Rs*I;
 
 
 %Simulink results of the simulation
+Load = 3.0386;                  %Pmax/I(Pmax)^2
 sim('PVArray.slx')
-Vout
-Iout
+figure
+plot(tout,Vout)
+hold on
+plot(tout,Iout)
+legend('Vout','Iout')
+xlabel('Time')
