@@ -28,6 +28,11 @@ Gr = 1000;                      %reference irradiance
 Vtr = K*Tc/q;                   %thermal voltage equivalent
 %-----------------------------------------------------------------------%
 
+%---------------------Circuit variables---------------------------------%
+Vo = 100;                       %Load voltage
+dIl = 0.2;                      %delta I_L
+%-----------------------------------------------------------------------%
+
 
 %Parameters of the mathematical model (m, Rsh, Rs, Io, Is)
 syms  m Rsh Rs
@@ -36,7 +41,7 @@ F = @(V) [Impr - Iscr + (Vmpr + V(3)*Impr + V(3)*Iscr)/ V(2) + (Iscr - (Vocr - V
             Impr + ((-(V(2)*Iscr - Vocr + V(3)*Iscr) * exp((Vmpr + V(3)*Impr - Vocr)/ (V(1)*Vtr))/ (V(2) * V(1)*Vtr) - 1/V(2))/ (1 + V(3) * (V(2)*Iscr - Vocr + V(3)*Iscr) * exp((Vmpr + V(3)*Impr - Vocr)/ (V(1)*Vtr))/ (V(2) * V(1)*Vtr) + V(3)/V(2))) * Vmpr;
             1/V(2) + (-(V(2)*Iscr - Vocr + V(3)*Iscr) * exp((V(3)*Iscr - Vocr)/ (V(1)*Vtr))/ (V(2) * V(1)*Vtr) - 1/V(2))/ (1 + V(3) * (V(2)*Iscr - Vocr + V(3)*Iscr) * exp((V(3)*Iscr - Vocr)/ (V(1)*Vtr))/ (V(2) * V(1)*Vtr) + V(3)/V(2))];
 
-InitialGuess = [60; 700; 0.2];
+InitialGuess = [60; 7000; 0.2];
 % options = optimoptions('fsolve','Display','none','PlotFcn',@optimplotfirstorderopt,'MaxFunctionEvaluations',2000);
 options = optimoptions('fsolve','MaxFunctionEvaluations',2000);
 sol = fsolve(F, InitialGuess,options);
@@ -55,11 +60,14 @@ Isc = G/ Gr * (Iscr + miu_Isc*(Tc - Tr));
 Voc = Vocr + miu_Voc*(Tc - Tr) + m*Vt*log(G/Gr);
 Io = (Isc - (Voc - Rs*Isc)/ Rsh) * exp(-Voc/ (m*Vt));
 Is = Io * exp(Voc/ (m*Vt)) + Voc/ Rsh;
+
 Vd_vetor = linspace(0,50);      %Adjust max value for better plots
 I = Is - Io * (exp(Vd_vetor/ (m*Vt)) - 1) - Vd_vetor/ Rsh;
 V = Vd_vetor - Rs*I;
 P = V .* I;
 [Pmpp, ind] = max(P);           %Returns the maximum power and where it occurs
+Imax = I(ind);
+Vmax = V(ind);
 
 %MATLAB results of the simulation
 % figure
@@ -77,11 +85,9 @@ P = V .* I;
 
 %Simulink results of the simulation
 Load = Pmpp/I(ind)^2;
-I(ind)
+Imax = I(ind);
 sim('PVArray.slx')
 
-figure
-plot(tout,Iout)
-legend('Iout')
+
 
 
