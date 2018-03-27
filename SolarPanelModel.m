@@ -30,7 +30,8 @@ Vtr = K*Tc/q;                   %thermal voltage equivalent
 
 %---------------------Circuit variables---------------------------------%
 Vo = 100;                       %Load voltage
-dIl = 0.2;                      %delta I_L
+t_PWM = 50e-6;                  %PWM signal period
+k_vc = 1/ (t_PWM*200);          %error gain
 %-----------------------------------------------------------------------%
 
 
@@ -66,8 +67,8 @@ I = Is - Io * (exp(Vd_vetor/ (m*Vt)) - 1) - Vd_vetor/ Rsh;
 V = Vd_vetor - Rs*I;
 P = V .* I;
 [Pmpp, ind] = max(P);           %Returns the maximum power and where it occurs
-Imax = I(ind);
-Vmax = V(ind);
+Impp = I(ind);
+Vmpp = V(ind);
 
 %MATLAB results of the simulation
 % figure
@@ -84,8 +85,11 @@ Vmax = V(ind);
 
 
 %Simulink results of the simulation
-Load = Pmpp/I(ind)^2;
-Imax = I(ind);
+Load = Pmpp/ Impp^2;
+delta_Il = Impp*0.1/ 2;
+L_inductor = Vo * t_PWM/ (4 * Impp*0.1);
+C1 = t_PWM * Impp*0.1/ (8 * Vmpp*0.05);
+C2 = Vo * t_PWM/ (Load * Vo*0.05);
 sim('PVArray.slx')
 
 
