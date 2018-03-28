@@ -31,7 +31,8 @@ Vtr = K*Tc/q;                   %thermal voltage equivalent
 %---------------------Circuit variables---------------------------------%
 Vo = 100;                       %Load voltage
 t_PWM = 50e-6;                  %PWM signal period
-k_vc = 1/ (t_PWM*200);          %error gain
+k_v = 1/ (t_PWM*10);
+k_vc = 1/ (t_PWM*10);           %error gain
 %-----------------------------------------------------------------------%
 
 
