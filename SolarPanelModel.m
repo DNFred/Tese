@@ -20,18 +20,18 @@ Iscr = 9.19;
 
 %-------------------Environment variables-------------------------------%
 %ta = 20;                        %atmospheric temperature (20 for NOCT)
-tc = 65;  %<---                 %cell temperature (25 for STC)
+tc = 65;  %<------------        %cell temperature (25 for STC)
 Tc = T+tc;                      %absolute cell temperature
 Tr = T + 25;                    %absolute reference temperature
-G = 1000; %<---                 %irradiance (1000 for STC, 800 for NOCT)
+G = 1000; %<------------        %irradiance (1000 for STC, 800 for NOCT)
 Gr = 1000;                      %reference irradiance
 Vtr = K*Tc/q;                   %thermal voltage equivalent
 %-----------------------------------------------------------------------%
 
 %---------------------Circuit variables---------------------------------%
-Vo = 100;                       %Load voltage
-t_PWM = 50e-6;                  %PWM signal period
-k_v = 1/ (t_PWM*1000);          %voltage gain
+Vo = 50;                       %Load voltage
+t_PWM = 20e-6;                  %PWM signal period
+k_v = 1/ (t_PWM*100);          %voltage gain
 k_vc = 1/ (t_PWM*10);           %error gain
 %-----------------------------------------------------------------------%
 
@@ -86,12 +86,11 @@ Vmpp = V(ind);
 
 
 %Simulink results of the simulation
-Load = Pmpp/ Impp^2;
+Load = Vo^2/Pmpp;
 delta_Il = Impp*0.1/ 2;
 L_inductor = Vo * t_PWM/ (4 * Impp*0.1);
-C1 = t_PWM * Impp*0.1/ (8 * Vmpp*0.05);
-C2 = Vo * t_PWM/ (Load * Vo*0.05);
-sim('PVArray.slx')
+C1 = t_PWM * Impp*0.1/ (8 * Vmpp*0.001);
+C2 = Vo * t_PWM/ (Load * Vo*0.01);
 
 
 
