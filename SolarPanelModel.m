@@ -30,9 +30,9 @@ Vtr = K*Tc/q;                   %thermal voltage equivalent
 
 %---------------------Circuit variables---------------------------------%
 Vo = 50;                       %Load voltage
-t_PWM = 20e-6;                  %PWM signal period
+t_PWM = 20e-6;                 %PWM signal period
 k_v = 1/ (t_PWM*500);          %voltage gain
-k_vc = 1/ (t_PWM*10);           %error gain
+k_vc = 1/ (t_PWM*50);           %error gain
 %-----------------------------------------------------------------------%
 
 
@@ -89,7 +89,7 @@ Vmpp = V(ind);
 Load = Vo^2/Pmpp;
 delta_Il = Impp*0.1/ 2;
 L_inductor = Vo * t_PWM/ (4 * Impp*0.01);
-C1 = t_PWM * Impp*0.1/ (8 * Vmpp*0.001);
+C1 = t_PWM * Impp*0.1/ (8 * Vmpp*0.0001);
 C2 = Vo * t_PWM/ (Load * Vo*0.001);
 
 
