@@ -21,7 +21,7 @@ Iscr = 9.19;
 %-------------------Environment variables-------------------------------%
 %ta = 20;                        %atmospheric temperature (20 for NOCT)
 tc = 25;  %<------------        %cell temperature (25 for STC)
-Tc = T+tc;                      %absolute cell temperature
+Tc = T + tc;                    %absolute cell temperature
 Tr = T + 25;                    %absolute reference temperature
 G = 1000; %<------------        %irradiance (1000 for STC, 800 for NOCT)
 Gr = 1000;                      %reference irradiance
@@ -90,7 +90,7 @@ Load = Vo^2/Pmpp;
 delta_Il = Impp*0.1/ 2;
 L_inductor = Vo * t_PWM/ (4 * Impp*0.01);
 C1 = t_PWM * Impp*0.1/ (8 * Vmpp*0.001);
-C2 = Vo * t_PWM/ (Load * Vo*0.01);
+C2 = Vo * t_PWM/ (Load * Vo*0.001);
 
 
 
