@@ -19,7 +19,7 @@ Vocr = 38.2;
 Iscr = 9.19;
 
 %-------------------Environment variables-------------------------------%
-%ta = 20;                        %atmospheric temperature (20 for NOCT)
+ta = 20;                        %atmospheric temperature (20 for NOCT)
 tc = 25;  %<------------        %cell temperature (25 for STC)
 Tc = T + tc;                    %absolute cell temperature
 Tr = T + 25;                    %absolute reference temperature
@@ -56,7 +56,7 @@ Isr = Ior * exp(Vocr/ (m*Vtr)) + Vocr/Rsh;
 
 
 %Simulation of the model
-%Tc = Tc;ta + G*(NOCT-20)/ 800 + 273.15;
+Tc = ta + G*(NOCT-20)/ 800 + 273.15;
 Vt = K*Tc/ q;
 Isc = G/ Gr * (Iscr + miu_Isc*(Tc - Tr));
 Voc = Vocr + miu_Voc*(Tc - Tr) + m*Vt*log(G/Gr);
@@ -71,27 +71,19 @@ P = V .* I;
 Impp = I(ind);
 Vmpp = V(ind);
 
-%MATLAB results of the simulation
-% figure
-% plot(V,I)
-% axis([0 Voc*1.1 0 Isc*1.1])
-% xlabel('Voltage [V]')
-% ylabel('Current [I]')
-% 
-% figure
-% plot(V,P)
-% axis([0 Voc*1.1 0 Pmpp*1.1])
-% xlabel('Voltage [V]')
-% ylabel('Power [W]')
 
+% %Simulink results for one panel
+% Load = Vo^2/Pmpp;
+% delta_Il = Impp*0.1/ 2;
+% L_inductor = Vo * t_PWM/ (4 * Impp*0.01);
+% C1 = t_PWM * Impp*0.1/ (8 * Vmpp*0.0001);
+% C2 = Vo * t_PWM/ (Load * Vo*0.001);
 
-%Simulink results of the simulation
-Load = Vo^2/Pmpp;
-delta_Il = Impp*0.1/ 2;
-L_inductor = Vo * t_PWM/ (4 * Impp*0.01);
-C1 = t_PWM * Impp*0.1/ (8 * Vmpp*0.0001);
-C2 = Vo * t_PWM/ (Load * Vo*0.001);
-
-
+%Simulink results for three panels
+Load = (3*Vo)^2/(3*Pmpp);
+delta_Il = (3*Impp)*0.1/ 2;
+L_inductor = (3*Vo) * t_PWM/ (4 * (3*Impp)*0.01);
+C1 = t_PWM * (3*Impp)*0.1/ (8 * (3*Vmpp)*0.0001);
+C2 = (3*Vo) * t_PWM/ (Load * (3*Vo)*0.001);
 
 
