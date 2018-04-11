@@ -31,7 +31,7 @@ Vtr = K*Tc/q;                   %thermal voltage equivalent
 %---------------------Circuit variables---------------------------------%
 Vo = 50;                       %Load voltage
 t_PWM = 20e-6;                 %PWM signal period
-k_v = 1/ (t_PWM*500);          %voltage gain
+k_v = 1/ (t_PWM*200);          %voltage gain
 k_vc = 1/ (t_PWM*50);           %error gain
 %-----------------------------------------------------------------------%
 
@@ -72,18 +72,12 @@ Impp = I(ind);
 Vmpp = V(ind);
 
 
-% %Simulink results for one panel
-% Load = Vo^2/Pmpp;
-% delta_Il = Impp*0.1/ 2;
-% L_inductor = Vo * t_PWM/ (4 * Impp*0.01);
-% C1 = t_PWM * Impp*0.1/ (8 * Vmpp*0.0001);
-% C2 = Vo * t_PWM/ (Load * Vo*0.001);
-
-%Simulink results for three panels
-Load = (3*Vo)^2/(3*Pmpp);
-delta_Il = (3*Impp)*0.1/ 2;
-L_inductor = (3*Vo) * t_PWM/ (4 * (3*Impp)*0.01);
-C1 = t_PWM * (3*Impp)*0.1/ (8 * (3*Vmpp)*0.0001);
-C2 = (3*Vo) * t_PWM/ (Load * (3*Vo)*0.001);
+%Simulink results for N panels
+N = 3;
+Load = (N*Vo)^2/(N*Pmpp);
+delta_Il = (N*Impp)*0.1/ 2;
+L_inductor = (N*Vo) * t_PWM/ (4 * (N*Impp)*0.01);
+C1 = t_PWM * (N*Impp)*0.1/ (8 * (N*Vmpp)*0.0001);
+C2 = (N*Vo) * t_PWM/ (Load * (N*Vo)*0.001);
 
 
