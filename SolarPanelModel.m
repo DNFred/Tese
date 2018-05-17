@@ -17,22 +17,28 @@ miu_Voc = -0.1184;
 miu_Isc = 0.0049;
 Vocr = 38.2;
 Iscr = 9.19;
+Pmin = 20;
 
 %-------------------Environment variables-------------------------------%
-ta = 20;                        %atmospheric temperature (20 for NOCT)
-tc = 25;  %<------------        %cell temperature (25 for STC)
+ta = 20;  %<------------        %atmospheric temperature (20 for NOCT)
+tc = 25;                        %cell temperature (25 for STC)
 Tc = T + tc;                    %absolute cell temperature
 Tr = T + 25;                    %absolute reference temperature
 G = 1000; %<------------        %irradiance (1000 for STC, 800 for NOCT)
 Gr = 1000;                      %reference irradiance
-Vtr = K*Tc/q;                   %thermal voltage equivalent
+Vtr = K*Tr/q;                   %thermal voltage equivalent
 %-----------------------------------------------------------------------%
 
 %---------------------Circuit variables---------------------------------%
+N = 3;    %<------------        %Number of panels
 Vo = 50;                        %Load voltage
 t_PWM = 20e-6;                  %PWM signal period
 k_v = 1/ (t_PWM*2500);          %voltage gain
-k_vc = 1/ (t_PWM*250);           %error gain
+k_vc = 1/ (t_PWM*250);          %error gain
+
+timeintegrator1 = 1.5;
+timeintegrator2 = 3;
+timeintegrator3 = 4.5;
 %-----------------------------------------------------------------------%
 
 
@@ -73,14 +79,20 @@ Vmpp = V(ind);
 
 
 %Simulink results for N panels
-N = 3;
-Load = (N*Vo)^2/(N*Pmpp);
+Load = (N*Voc)^2/(N*Pmin);
 delta_Il = (N*Impp)*0.1/ 2;
 L_inductor = (N*Vo) * t_PWM/ (4 * (N*Impp)*0.01);
 k_e = 1/ L_inductor * 4;
 C1 = t_PWM * (N*Impp)*0.1/ (8 * (N*Vmpp)*0.0001);
 C2 = (N*Vo) * t_PWM/ (Load * (N*Vo)*0.001);
-timeintegrator1 = 0.33;
-timeintegrator2 = 0.66;
-timeintegrator3 = 1;
+
+a1 = 3;
+wn = 200;
+syms kI kv ki
+[SkI,Skv,Ski] = solve (1/(kI*(kv+ki))==1/(wn^3),(2*kv+ki)/(kI*(kv+ki))==a1/(wn^2), 1/(C1^2*kI*(kv+ki))+kv/kI==a1/wn, kI, kv, ki);
+kv = max(double(Skv));
+ki = max(double(Ski));
+ke = ki + kv;
+
+k_l = k_v/10;
 
