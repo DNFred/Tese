@@ -8,7 +8,7 @@ K = 1.38 * 10^(-23);            %Boltzmann constant
 T = 273.15;                     %0 degrees Celsius in absolute scale 
 q = 1.6 * 10^(-19);             %electron charge
 
-%Catalog at STC (Standard Test Conditions)
+%Catalog values at STC (Standard Test Conditions)
 Pmpr = 270;
 Vmpr = 31.1;
 Impr = 8.67;
@@ -33,12 +33,11 @@ Vtr = K*Tr/q;                   %thermal voltage equivalent
 N = 3;    %<------------        %Number of panels
 Vo = 50;                        %Load voltage
 t_PWM = 20e-6;                  %PWM signal period
-k_v = 1/ (t_PWM*2500);          %voltage gain
-k_vc = 1/ (t_PWM*250);          %error gain
+k_v = 1/ (t_PWM*500);           %voltage gain for v_ref
 
-timeintegrator1 = 1.5;
-timeintegrator2 = 3;
-timeintegrator3 = 4.5;
+timeintegrator1 = 2.5;
+timeintegrator2 = 5;
+timeintegrator3 = 7.5;
 %-----------------------------------------------------------------------%
 
 
@@ -69,6 +68,7 @@ Voc = Vocr + miu_Voc*(Tc - Tr) + m*Vt*log(G/Gr);
 Io = (Isc - (Voc - Rs*Isc)/ Rsh) * exp(-Voc/ (m*Vt));
 Is = Io * exp(Voc/ (m*Vt)) + Voc/ Rsh;
 
+%Plot of the model
 Vd_vetor = linspace(0,50);      %Adjust max value for better plots
 I = Is - Io * (exp(Vd_vetor/ (m*Vt)) - 1) - Vd_vetor/ Rsh;
 V = Vd_vetor - Rs*I;
@@ -78,14 +78,17 @@ Impp = I(ind);
 Vmpp = V(ind);
 
 
-%Simulink results for N panels
+%Simulink parameters for N panels
 Load = (N*Voc)^2/(N*Pmin);
 delta_Il = (N*Impp)*0.1/ 2;
 L_inductor = (N*Vo) * t_PWM/ (4 * (N*Impp)*0.01);
 k_e = 1/ L_inductor * 4;
 C1 = t_PWM * (N*Impp)*0.1/ (8 * (N*Vmpp)*0.0001);
 C2 = (N*Vo) * t_PWM/ (Load * (N*Vo)*0.001);
+k_vc = 1/ C1;                   %v_pv error gain
+k_l = 0.1/ C2;                  %v_o error gain (variable load)
 
+%Parameters for integrated gama
 a1 = 3;
 wn = 200;
 syms kI kv ki
@@ -93,6 +96,4 @@ syms kI kv ki
 kv = max(double(Skv));
 ki = max(double(Ski));
 ke = ki + kv;
-
-k_l = k_v/10;
 
