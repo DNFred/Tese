@@ -86,7 +86,7 @@ k_e = 1/ L_inductor * 4;
 C1 = t_PWM * (N*Impp)*0.1/ (8 * (N*Vmpp)*0.0001);
 C2 = (N*Vo) * t_PWM/ (Load * (N*Vo)*0.001);
 k_vc = 1/ C1;                   %v_pv error gain
-k_l = 0.01/ C2;                  %v_o error gain (variable load)
+k_l = 0.01/ C2;                 %v_o error gain (variable load)
 
 %Parameters for integrated gama
 a1 = 3;
