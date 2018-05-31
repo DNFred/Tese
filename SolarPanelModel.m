@@ -35,9 +35,15 @@ Vo = 50;                        %Load voltage
 t_PWM = 20e-6;                  %PWM signal period
 k_v = 1/ (t_PWM*5000);           %voltage gain for v_ref
 
-timeintegrator1 = 1.5;
-timeintegrator2 = 3;
-timeintegrator3 = 4.5;
+timeintegrator1 = 1;
+timeintegrator2 = 2;
+timeintegrator3 = 3;
+timeintegrator4 = 4;
+timeintegrator5 = 5;
+timeintegrator6 = 6;
+timeintegrator7 = 7;
+timeintegrator8 = 8;
+timeintegrator9 = 9;
 %-----------------------------------------------------------------------%
 
 
