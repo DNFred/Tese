@@ -30,10 +30,10 @@ Vtr = K*Tr/q;                   %thermal voltage equivalent
 %-----------------------------------------------------------------------%
 
 %---------------------Circuit variables---------------------------------%
-N = 3;    %<------------        %Number of panels
+N = 1;    %<------------        %Number of panels
 Vo = 50;                        %Load voltage
 t_PWM = 20e-6;                  %PWM signal period
-k_v = 1/ (t_PWM*500);           %voltage gain for v_ref
+k_v = 1/ (t_PWM*5000);           %voltage gain for v_ref
 
 timeintegrator1 = 1.5;
 timeintegrator2 = 3;
@@ -88,12 +88,21 @@ C2 = (N*Vo) * t_PWM/ (Load * (N*Vo)*0.001);
 k_vc = 1/ C1;                   %v_pv error gain
 k_l = 0.01/ C2;                 %v_o error gain (variable load)
 
-%Parameters for integrated gama
-a1 = 3;
+%Parameters for Lyapunov integral term for Il calculation (reduce following
+%error)
 wn = 200;
-syms kI kv ki
-[SkI,Skv,Ski] = solve (1/(kI*(kv+ki))==1/(wn^3),(2*kv+ki)/(kI*(kv+ki))==a1/(wn^2), 1/(C1^2*kI*(kv+ki))+kv/kI==a1/wn, kI, kv, ki);
-kv = max(double(Skv));
-ki = max(double(Ski));
-ke = ki + kv;
+csi = 1.25;
+ki = wn^2;
+kv = 2 * 1.25 * wn;
+
+
+% %Parameters for integrated gama
+% a1 = 3;
+% wn_ig = 200;
+% syms kI kv_ig ki_ig
+% [SkI,Skv,Ski] = solve (1/(kI*(kv_ig+ki_ig))==1/(wn_ig^3),(2*kv_ig+ki_ig)/(kI*(kv_ig+ki_ig))==a1/(wn_ig^2), 1/(C1^2*kI*(kv_ig+ki_ig))+kv_ig/kI==a1/wn_ig, kI, kv_ig, ki_ig);
+% kv_ig = max(double(Skv));
+% ki_ig = max(double(Ski));
+% ke_ig = ki_ig + kv_ig;
+
 
