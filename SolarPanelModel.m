@@ -30,20 +30,15 @@ Vtr = K*Tr/q;                   %thermal voltage equivalent
 %-----------------------------------------------------------------------%
 
 %---------------------Circuit variables---------------------------------%
-N = 1;    %<------------        %Number of panels
+N = 3;    %<------------        %Number of panels
 Vo = 50;                        %Load voltage
 t_PWM = 20e-6;                  %PWM signal period
-k_v = 1/ (t_PWM*5000);           %voltage gain for v_ref
+k_v = 1/ (t_PWM*500);%10000);           %voltage gain for v_ref
+k_vc = 1/ (t_PWM*50);%);
 
-timeintegrator1 = 1;
-timeintegrator2 = 2;
-timeintegrator3 = 3;
-timeintegrator4 = 4;
-timeintegrator5 = 5;
-timeintegrator6 = 6;
-timeintegrator7 = 7;
-timeintegrator8 = 8;
-timeintegrator9 = 9;
+timeintegrator1 = 2;
+timeintegrator2 = 4;
+timeintegrator3 = 6;
 %-----------------------------------------------------------------------%
 
 
@@ -85,30 +80,29 @@ Vmpp = V(ind);
 
 
 %Simulink parameters for N panels
-Load = (N*Voc)^2/(N*Pmin);
+Load = (N*Vo)^2/(N*Pmpp);
 delta_Il = (N*Impp)*0.1/ 2;
 L_inductor = (N*Vo) * t_PWM/ (4 * (N*Impp)*0.01);
 k_e = 1/ L_inductor * 4;
 C1 = t_PWM * (N*Impp)*0.1/ (8 * (N*Vmpp)*0.0001);
 C2 = (N*Vo) * t_PWM/ (Load * (N*Vo)*0.001);
-k_vc = 1/ C1;                   %v_pv error gain
+%k_vc = 1/ C1;                   %v_pv error gain
 k_l = 0.01/ C2;                 %v_o error gain (variable load)
 
-%Parameters for Lyapunov integral term for Il calculation (reduce following
-%error)
-wn = 200;
+%Parameters for voltage control
+wn = 2;
 csi = 1.25;
-ki = wn^2;
-kv = 2 * 1.25 * wn;
+k1 = wn^2;
+k2 = 2 * 1.25 * wn;
 
 
-% %Parameters for integrated gama
-% a1 = 3;
-% wn_ig = 200;
-% syms kI kv_ig ki_ig
-% [SkI,Skv,Ski] = solve (1/(kI*(kv_ig+ki_ig))==1/(wn_ig^3),(2*kv_ig+ki_ig)/(kI*(kv_ig+ki_ig))==a1/(wn_ig^2), 1/(C1^2*kI*(kv_ig+ki_ig))+kv_ig/kI==a1/wn_ig, kI, kv_ig, ki_ig);
-% kv_ig = max(double(Skv));
-% ki_ig = max(double(Ski));
-% ke_ig = ki_ig + kv_ig;
+% %Parameters for current control
+a1 = 3;
+wn_ig = 100;
+syms kI kv_ig ki_ig
+[SkI,Skv,Ski] = solve (1/(kI*(kv_ig+ki_ig))==1/(wn_ig^3),(2*kv_ig+ki_ig)/(kI*(kv_ig+ki_ig))==a1/(wn_ig^2), 1/(C1^2*kI*(kv_ig+ki_ig))+kv_ig/kI==a1/wn_ig, kI, kv_ig, ki_ig);
+kv_ig = max(double(Skv));
+ki_ig = max(double(Ski));
+ke_ig = ki_ig + kv_ig;
 
 
