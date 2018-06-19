@@ -36,9 +36,10 @@ t_PWM = 20e-6;                  %PWM signal period
 k_v = 1/ (t_PWM*500);%10000);           %voltage gain for v_ref
 k_vc = 1/ (t_PWM*50);%);
 
-timeintegrator1 = 2;
-timeintegrator2 = 4;
-timeintegrator3 = 6;
+t_int1 = 0.5;
+t_int2 = 1;
+t_int3 = 1.5;
+setup_time = 2;
 %-----------------------------------------------------------------------%
 
 
