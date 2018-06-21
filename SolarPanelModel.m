@@ -2,6 +2,7 @@ clear all;
 close all;
 format compact;
 clc;
+pause('on');
 
 %Global constants
 K = 1.38 * 10^(-23);            %Boltzmann constant
@@ -35,6 +36,14 @@ Vo = 50;                        %Load voltage
 t_PWM = 20e-6;                  %PWM signal period
 k_v = 1/ (t_PWM*500);%10000);           %voltage gain for v_ref
 k_vc = 1/ (t_PWM*50);%);
+
+t_int = 0.5;
+trigger_signal = 1e-3;
+GREEN = 0;
+ORANGE = 1;
+RED = 2;
+ON = 1;
+OFF = 0;
 
 t_int1 = 0.5;
 t_int2 = 1;
