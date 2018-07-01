@@ -96,6 +96,17 @@ L_inductor = (N*Vo) * t_PWM/ (4 * (N*Impp)*0.01);
 k_e = 1/ L_inductor * 4;
 C1 = t_PWM * (N*Impp)*0.1/ (8 * (N*Vmpp)*0.0001);
 C2 = (N*Vo) * t_PWM/ (Load * (N*Vo)*0.001);
+
+%Inverter parameters
+Li = 500.12e-6;
+Ci = 505.44e-9;
+Cdc_inv = 5000e-6;
+k_inv = 0.05/Cdc_inv;
+k_A = 1/Cdc_inv;
+Vgrid = 230;
+Po = 600e3*0.2;
+GAMA = Vgrid/430;
+
 %k_vc = 1/ C1;                   %v_pv error gain
 k_l = 0.01/ C2;                 %v_o error gain (variable load)
 
