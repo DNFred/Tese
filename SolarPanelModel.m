@@ -31,8 +31,8 @@ Vtr = K*Tr/q;                   %thermal voltage equivalent
 %-----------------------------------------------------------------------%
 
 %---------------------Circuit variables---------------------------------%
-N = 3;    %<------------        %Number of panels
-Vo = 50;                        %Load voltage
+N = 1;    %<------------        %Number of panels
+Vo = 400;                       %Load voltage
 t_PWM = 20e-6;                  %PWM signal period
 k_v = 1/ (t_PWM*500);%10000);           %voltage gain for v_ref
 k_vc = 1/ (t_PWM*50);%);
@@ -44,11 +44,6 @@ ORANGE = 1;
 RED = 2;
 ON = 1;
 OFF = 0;
-
-t_int1 = 0.5;
-t_int2 = 1;
-t_int3 = 1.5;
-setup_time = 2;
 %-----------------------------------------------------------------------%
 
 
@@ -89,12 +84,13 @@ Impp = I(ind);
 Vmpp = V(ind);
 
 
-%Simulink parameters for N panels
+%Boost parameters for N panels
 Load = (N*Vo)^2/(N*Pmpp);
 delta_Il = (N*Impp)*0.1/ 2;
 L_inductor = (N*Vo) * t_PWM/ (4 * (N*Impp)*0.01);
 k_e = 1/ L_inductor * 4;
 C1 = t_PWM * (N*Impp)*0.1/ (8 * (N*Vmpp)*0.0001);
+N = 1;    %<------------        %3 for Parallel/ 1 for Series (independent)
 C2 = (N*Vo) * t_PWM/ (Load * (N*Vo)*0.001);
 
 %Inverter parameters
@@ -107,6 +103,11 @@ Vgrid = 230;
 Po = 600e3*0.2;
 GAMA = Vgrid/430;
 
+Td = t_PWM/2;
+a = 2;
+Tzv = 2*3^2*Td;
+
+
 %k_vc = 1/ C1;                   %v_pv error gain
 k_l = 0.01/ C2;                 %v_o error gain (variable load)
 
@@ -117,7 +118,7 @@ k1 = wn^2;
 k2 = 2 * 1.25 * wn;
 
 
-% %Parameters for current control
+%Parameters for current control
 a1 = 3;
 wn_ig = 100;
 syms kI kv_ig ki_ig
