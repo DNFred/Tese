@@ -31,7 +31,7 @@ Vtr = K*Tr/q;                   %thermal voltage equivalent
 %-----------------------------------------------------------------------%
 
 %---------------------Circuit variables---------------------------------%
-N = 1;    %<------------        %Number of panels
+N = 3;    %<------------        %Number of panels
 Vo = 400;                       %Load voltage
 t_PWM = 20e-6;                  %PWM signal period
 k_v = 1/ (t_PWM*500);%10000);           %voltage gain for v_ref
@@ -90,7 +90,7 @@ delta_Il = (N*Impp)*0.1/ 2;
 L_inductor = (N*Vo) * t_PWM/ (4 * (N*Impp)*0.01);
 k_e = 1/ L_inductor * 4;
 C1 = t_PWM * (N*Impp)*0.1/ (8 * (N*Vmpp)*0.0001);
-N = 1;    %<------------        %3 for Parallel/ 1 for Series (independent)
+N = 3;    %<------------        %3 for Parallel/ 1 for Series (independent)
 C2 = (N*Vo) * t_PWM/ (Load * (N*Vo)*0.001);
 
 %Inverter parameters
@@ -104,7 +104,7 @@ Po = 600e3*0.2;
 GAMA = Vgrid/430;
 
 Td = t_PWM/2;
-a = 2;
+a = 3;
 Tzv = 2*3^2*Td;
 
 
@@ -120,7 +120,7 @@ k2 = 2 * 1.25 * wn;
 
 %Parameters for current control
 a1 = 3;
-wn_ig = 100;
+wn_ig = 2*pi*100;
 syms kI kv_ig ki_ig
 [SkI,Skv,Ski] = solve (1/(kI*(kv_ig+ki_ig))==1/(wn_ig^3),(2*kv_ig+ki_ig)/(kI*(kv_ig+ki_ig))==a1/(wn_ig^2), 1/(C1^2*kI*(kv_ig+ki_ig))+kv_ig/kI==a1/wn_ig, kI, kv_ig, ki_ig);
 kv_ig = max(double(Skv));
