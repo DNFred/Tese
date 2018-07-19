@@ -105,7 +105,7 @@ GAMA = Vgrid/430;
 
 Td = t_PWM/2;
 a = 3;
-Tzv = 2*3^2*Td;
+Tzv = 2*a^2*Td;
 
 
 %k_vc = 1/ C1;                   %v_pv error gain
