@@ -94,7 +94,7 @@ N = 3;    %<------------        %3 for Parallel/ 1 for Series (independent)
 C2 = (N*Vo) * t_PWM/ (Load * (N*Vo)*0.001);
 
 %Inverter parameters
-Li = 500.12e-6;
+Li = 5e-3;
 Ci = 505.44e-9;
 Cdc_inv = 5000e-6;
 k_inv = 0.05/Cdc_inv;
@@ -103,9 +103,11 @@ Vgrid = 230;
 Po = 600e3*0.2;
 GAMA = Vgrid/430;
 
-Td = t_PWM/2;
+Td = 1/50;
 a = 3;
+G = 0.8;
 Tzv = 2*a^2*Td;
+Tpv = 4*a^3*G*Td^2/Cdc_inv;
 
 
 %k_vc = 1/ C1;                   %v_pv error gain
