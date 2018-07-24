@@ -83,6 +83,44 @@ P = V .* I;
 Impp = I(ind);
 Vmpp = V(ind);
 
+figure
+VI = plot(V(1:71),I(1:71)*10,'k');
+xlim([0 Voc*1.1])
+ylim([-50 250])
+hold on
+VP = plot(V,P,'k');
+set(VI,'LineWidth',2)
+dP = diff(P)./diff(V);
+plot(V(2:end)-0.52,dP*6,'--k');
+lgd = legend('$I_{PV}$', '$P_{PV}$', '$\frac{dP_{PV}}{dV_{PV}}$','Location','northeast');
+set(lgd,'Interpreter','latex');
+set(lgd,'FontSize',17);
+VM = plot([0,Vmpp],[Impp*10,Impp*10],':k');
+IM = plot([Vmpp,Vmpp],[0,Pmpp],':k');
+PM = plot([0,Vmpp],[Pmpp,Pmpp],':k');
+
+%%%%%%%%%%Put arrows in the Axis%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% determine position of the axes
+axp = gca;
+axp.XAxisLocation = 'origin';
+axp.YAxisLocation = 'origin';
+% determine startpoint and endpoint for the arrows 
+xs=0.1302;
+xe=0.85;
+ys=0.245;
+ye=0.95;    
+% make the arrows
+annotation('arrow', [xs xe],[ys ys]);
+annotation('arrow', [xs xs],[ys ye]);
+% remove old box and axes
+box off
+set(gca,'YTick',[Impp*10, Isc*10, Pmpp])
+set(gca,'yticklabel',({'I_{MPP}','I_{SC}','P_{MPP}'}))
+set(gca,'XTick',[Vmpp Voc])
+set(gca,'xticklabel',({'V_{MPP}','V_{OC}'}))
+set(gca, 'FontSize', 8)
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 
 %Boost parameters for N panels
 Load = (N*Vo)^2/(N*Pmpp);
